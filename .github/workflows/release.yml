@@ -1,0 +1,29 @@
+name: "Build release"
+
+on:
+    push:
+        tags:
+            - 'v*'
+
+jobs:
+    build-release:
+        name: "Build Go Release"
+        runs-on: ubuntu-latest
+
+        steps:
+        - uses: actions/checkout@v4
+
+        - name: "Set up GO"
+          uses: actions/setup-go@v4
+          with:
+            go-version: '1.23'
+
+        - name: "Create release"
+          uses: actions/create-release@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            tag_name: ${{ github.ref }}
+            release_name: Release-${{ github.ref }}
+            draft: false
+            prerelease: false           
